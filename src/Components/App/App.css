@@ -1,0 +1,16 @@
+/* Color Theme Swatches in Hex */
+.Bob-1-hex { color: #3D5473; }
+.Bob-2-hex { color: #400101; }
+.Bob-3-hex { color: #A61F1F; }
+.Bob-4-hex { color: #F23030; }
+.Bob-5-hex { color: #F2F2F2; }
+
+.covid {
+    background-color: #F2F2F2;
+    width:100%;
+    min-height: 100vh;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin:0 auto;
+}

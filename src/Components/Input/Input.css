@@ -1,0 +1,69 @@
+.input_form {
+    width:480px;
+    padding:10px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    height:50px;
+    margin-top: 20px;
+}
+.input_cont {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.input_cont > input {
+    width:400px;
+    padding:10px;
+    border:1px solid #000;
+    border-radius: 5px;
+
+}
+.input_cont > input:focus {
+    outline: none !important;
+}
+.input_cont > input::placeholder {
+    color:#000;
+}
+.input_form > button {
+    margin-left: 20px;
+    padding:10px;
+    border:none;
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    background-color: #3D5473;
+    color:#fff;
+    font-weight: 600;
+    transition: background-color 200ms ease-in-out;
+}
+.input_form > button:hover {
+    cursor: pointer;
+    background-color: #F23030;
+}
+.suggestion_cont {
+    list-style-type: none;
+    margin: 0;
+    padding:0;
+    background-color: #3D5473;
+    color:#fff;
+    text-align: center;
+    width:422px;
+    position: absolute;
+    z-index: 2;
+    top:160px;
+}
+.suggestion_cont > li {
+    margin: 5px 0;
+}
+.suggestion_cont > li:hover {
+    cursor: pointer;
+    background-color: #F23030;
+}
+.word_count_container > p {
+    margin-left: 20px;
+    width:50px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}
