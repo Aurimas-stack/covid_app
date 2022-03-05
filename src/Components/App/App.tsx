@@ -1,12 +1,16 @@
-import { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 
 import { appReducer, defaultState } from "./appReducer/appReducer";
-import { countryListArray } from "../../utils/list_of_country_names";
+import {
+  countryListArray,
+  CountryList,
+} from "../../utils/list_of_country_names";
 import { getError } from "../../utils/error";
 import { validateInput } from "../../utils/inputValidation";
-import { fetchTotal } from "../../utils/fetchTotal";
+import { fetchTotal, fetchCountryReport } from "../../utils/fetchTotal";
 
 import LatestData from "../LatestData/LatestData";
+import CountryReport from "../CountryReport/CountryReport";
 import Input from "../Input/Input";
 import Loader from "../Loader/Loader";
 
@@ -22,7 +26,7 @@ function App(): JSX.Element {
       try {
         const response = await fetchTotal();
         const data = await response.json();
-        dispatch({ type: "TOTALS", value: [data.data]});
+        dispatch({ type: "TOTALS", value: [data.data] });
       } catch (error: any) {
         dispatch({ type: "ERROR", value: getError(error) });
       }
@@ -30,7 +34,6 @@ function App(): JSX.Element {
     fetchTotals();
 
     dispatch({ type: "LOADING", value: false });
-
   }, []);
 
   const handleSuggestedCountries = () => {
@@ -46,27 +49,71 @@ function App(): JSX.Element {
     dispatch({
       type: "SUGGEST_COUNTRIES",
       value: countryListArray.filter((country) => {
-        return country.toLowerCase().includes(state.input.toLowerCase());
+        return country.name
+          .toLocaleLowerCase()
+          .includes(state.input.toLocaleLowerCase());
       }),
     });
   };
 
+  const handleCovidCountry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const inputValidation: { error: string; value: boolean } = validateInput(
+      state.input
+    );
+    const country: CountryList[] = countryListArray.filter((country) => {
+      return country.name
+        .toLocaleLowerCase()
+        .includes(state.input.toLocaleLowerCase());
+    });
+
+    if (inputValidation.value === true) {
+      dispatch({ type: "ERROR", value: inputValidation.error });
+      return;
+    }
+
+    if (country.length > 1 || country.length === 0) {
+      dispatch({ type: "ERROR", value: "Country not found." });
+      return;
+    }
+
+    dispatch({ type: "LOADING_COUNTRY_DATA", value: true });
+
+    try {
+      const response = await fetchCountryReport(country[0].code3);
+      const data = await response.json();
+      dispatch({ type: "COUNTRY_REPORT", value: data.data });
+    } catch (error: any) {
+      dispatch({ type: "ERROR", value: getError(error) });
+    }
+
+    dispatch({ type: "LOADING_COUNTRY_DATA", value: false });
+  };
 
   return (
     <div
+      style={
+        state.loading
+          ? { backgroundColor: "#3D5473" }
+          : { backgroundColor: "#F2F2F2" }
+      }
       className="covid"
       onClick={() => dispatch({ type: "SHOW_SUGGESTIONS", value: false })}
     >
-      {!state.loading ?(
+      {!state.loading ? (
         <>
-          <LatestData data={state.latestData}/>
+          <LatestData data={state.latestData} />
           <Input
             state={state}
             dispatch={dispatch}
             onSuggestedCountries={handleSuggestedCountries}
+            handleCovidCountry={handleCovidCountry}
           />
+          {state.loadingCountryData ? <Loader /> : <CountryReport report={state.countryReport}/>}
         </>
-      ) : <Loader />}
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }

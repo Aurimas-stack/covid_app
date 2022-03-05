@@ -1,14 +1,15 @@
-export interface LatestData {
-  country: string;
-  code: string;
+export interface LatestCountryData {
+  active: number;
+  active_diff: number;
   confirmed: number;
-  recovered: number;
-  critical: number;
+  confirmed_diff: number;
+  date: string;
   deaths: number;
-  latitude: number;
-  longitude: number;
-  lastChange: string;
-  lastUpdate: string;
+  deaths_diff: number;
+  fatality_rate: number;
+  last_update: string;
+  recovered: number;
+  recovered_diff: number;
 }
 
 export interface LatestTotals {

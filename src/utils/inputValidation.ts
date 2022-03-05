@@ -5,13 +5,13 @@ export const validateInput = (inputValue: string) => {
   let value: boolean = true;
 
   if (inputValue.length === 0) {
-    error = "Type in a location.";
+    error = "Type in a country.";
 
     return { error, value };
   }
 
   if (inputValue.length > 56) {
-    error = "Your location name is too long.";
+    error = "Country name is too long.";
 
     return { error, value };
   }

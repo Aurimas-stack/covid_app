@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import { Action, InitialState } from "../App/appReducer/appReducer";
 
@@ -10,15 +10,21 @@ interface InputProps {
   state: InitialState;
   dispatch: React.Dispatch<Action>;
   onSuggestedCountries: () => void;
+  handleCovidCountry: (e: React.FormEvent) => Promise<void>;
 }
 
-const Input: FC<InputProps> = ({ state, dispatch, onSuggestedCountries }) => {
+const Input: FC<InputProps> = ({
+  state,
+  dispatch,
+  onSuggestedCountries,
+  handleCovidCountry,
+}) => {
   const suggestionList =
     state.suggestedCountries.length > 5
       ? state.suggestedCountries.slice(0, 5)
       : state.suggestedCountries;
   return (
-    <form className="input_form">
+    <form className="input_form" onSubmit={handleCovidCountry}>
       <div className="input_cont">
         <input
           type="text"
@@ -35,16 +41,16 @@ const Input: FC<InputProps> = ({ state, dispatch, onSuggestedCountries }) => {
         />
         {state.showSuggestions && (
           <ul className="suggestion_cont">
-            {suggestionList.map((suggestion, idx) => {
+            {Object.values(suggestionList).map((suggestion, idx) => {
               return (
                 <li
                   key={idx}
                   onClick={() => {
-                    dispatch({ type: "INPUT", value: suggestion });
+                    dispatch({ type: "INPUT", value: suggestion.name });
                     dispatch({ type: "SHOW_SUGGESTIONS", value: false });
                   }}
                 >
-                  {suggestion}
+                  {suggestion.name}
                 </li>
               );
             })}
