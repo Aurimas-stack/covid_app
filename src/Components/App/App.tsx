@@ -80,7 +80,7 @@ function App(): JSX.Element {
     dispatch({ type: "LOADING_COUNTRY_DATA", value: true });
 
     try {
-      const response = await fetchCountryReport(country[0].code3);
+      const response: Response = await fetchCountryReport(country[0].code3);
       const data = await response.json();
       dispatch({ type: "COUNTRY_REPORT", value: data.data });
     } catch (error: any) {
@@ -100,7 +100,7 @@ function App(): JSX.Element {
       className="covid"
       onClick={() => dispatch({ type: "SHOW_SUGGESTIONS", value: false })}
     >
-      {!state.loading ? (
+      {state.loading === false ? (
         <>
           <LatestData data={state.latestData} />
           <Input
@@ -109,7 +109,13 @@ function App(): JSX.Element {
             onSuggestedCountries={handleSuggestedCountries}
             handleCovidCountry={handleCovidCountry}
           />
-          {state.loadingCountryData ? <Loader /> : <CountryReport report={state.countryReport}/>}
+          {state.loadingCountryData ? (
+            <Loader />
+          ) : (
+            state.countryReport.length > 0 && (
+              <CountryReport report={state.countryReport} />
+            )
+          )}
         </>
       ) : (
         <Loader />
