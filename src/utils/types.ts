@@ -1,27 +1,42 @@
-export interface LatestCountryData {
-  active: number;
-  active_diff: number;
-  confirmed: number;
-  confirmed_diff: number;
+export interface SixMonthsCountryData {
+  id: string;
+  symbol: string;
+  Country: string;
+  Continent: string;
   date: string;
-  deaths: number;
-  deaths_diff: number;
-  fatality_rate: number;
-  last_update: string;
-  recovered: number;
-  recovered_diff: number;
+  total_cases: number;
+  new_cases: number;
+  total_deaths: number;
+  new_deaths: number;
+  total_tests: number;
+  new_tests: number;
 }
 
 export interface LatestTotals {
-  active: number;
-  active_diff: number;
-  confirmed: number;
-  confirmed_diff: number;
-  date: string;
-  deaths: number;
-  deaths_diff: number;
-  fatality_rate: number;
-  last_update: string;
-  recovered: number;
-  recovered_diff: number;
+  rank: number;
+  id: string;
+  Country: string;
+  Continent: string;
+  TwoLetterSymbol: null;
+  ThreeLetterSymbol: null;
+  Infection_Risk: number;
+  Case_Fatality_Rate: number;
+  Test_Percentage: number;
+  Recovery_Proporation: number;
+  TotalCases: number;
+  NewCases: number;
+  TotalDeaths: number;
+  NewDeaths: number;
+  TotalRecovered: string;
+  NewRecovered: number;
+  ActiveCases: number;
+  TotalTests: string;
+  Population: string;
+  one_Caseevery_X_ppl: number;
+  one_Deathevery_X_ppl: number;
+  one_Testevery_X_ppl: number;
+  Deaths_1M_pop: number;
+  Serious_Critical: number;
+  Tests_1M_Pop: number;
+  TotCases_1M_Pop: number;
 }

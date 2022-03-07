@@ -46,11 +46,11 @@ const Input: FC<InputProps> = ({
                 <li
                   key={idx}
                   onClick={() => {
-                    dispatch({ type: "INPUT", value: suggestion.name });
+                    dispatch({ type: "INPUT", value: suggestion.Country });
                     dispatch({ type: "SHOW_SUGGESTIONS", value: false });
                   }}
                 >
-                  {suggestion.name}
+                  {suggestion.Country}
                 </li>
               );
             })}

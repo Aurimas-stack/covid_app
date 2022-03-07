@@ -1,7 +1,7 @@
 import React from "react";
 
 import { CountryList } from "../../../utils/list_of_country_names";
-import { LatestTotals, LatestCountryData } from "../../../utils/types";
+import { LatestTotals, SixMonthsCountryData } from "../../../utils/types";
 
 export type Action =
   | { type: "DEFAULT_STATE" }
@@ -12,7 +12,7 @@ export type Action =
   | { type: "SHOW_SUGGESTIONS"; value: boolean }
   | { type: "SHOW_WORD_COUNT"; value: boolean }
   | { type: "SUGGEST_COUNTRIES"; value: CountryList[] }
-  | { type: "COUNTRY_REPORT"; value: LatestCountryData[] }
+  | { type: "COUNTRY_REPORT"; value: SixMonthsCountryData[] }
   | { type: "TOTALS"; value: LatestTotals[] };
 
 export interface InitialState {
@@ -23,7 +23,7 @@ export interface InitialState {
   showSuggestions: boolean;
   showWordCount: boolean;
   suggestedCountries: CountryList[];
-  countryReport: LatestCountryData[];
+  countryReport: SixMonthsCountryData[];
   latestData: LatestTotals[];
 }
 

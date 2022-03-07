@@ -26,14 +26,15 @@ function App(): JSX.Element {
       try {
         const response = await fetchTotal();
         const data = await response.json();
-        dispatch({ type: "TOTALS", value: [data.data] });
+        dispatch({ type: "TOTALS", value: [data[0]] });
       } catch (error: any) {
         dispatch({ type: "ERROR", value: getError(error) });
       }
     };
     fetchTotals();
-
     dispatch({ type: "LOADING", value: false });
+    return;
+
   }, []);
 
   const handleSuggestedCountries = () => {
@@ -49,7 +50,7 @@ function App(): JSX.Element {
     dispatch({
       type: "SUGGEST_COUNTRIES",
       value: countryListArray.filter((country) => {
-        return country.name
+        return country.Country
           .toLocaleLowerCase()
           .includes(state.input.toLocaleLowerCase());
       }),
@@ -62,7 +63,7 @@ function App(): JSX.Element {
       state.input
     );
     const country: CountryList[] = countryListArray.filter((country) => {
-      return country.name
+      return country.Country
         .toLocaleLowerCase()
         .includes(state.input.toLocaleLowerCase());
     });
@@ -80,9 +81,9 @@ function App(): JSX.Element {
     dispatch({ type: "LOADING_COUNTRY_DATA", value: true });
 
     try {
-      const response: Response = await fetchCountryReport(country[0].code3);
+      const response: Response = await fetchCountryReport(country[0].ThreeLetterSymbol);
       const data = await response.json();
-      dispatch({ type: "COUNTRY_REPORT", value: data.data });
+      dispatch({ type: "COUNTRY_REPORT", value: data });
     } catch (error: any) {
       dispatch({ type: "ERROR", value: getError(error) });
     }
@@ -102,7 +103,7 @@ function App(): JSX.Element {
     >
       {state.loading === false ? (
         <>
-          <LatestData data={state.latestData} />
+          {state.latestData.length > 0 && <LatestData data={state.latestData} />}
           <Input
             state={state}
             dispatch={dispatch}

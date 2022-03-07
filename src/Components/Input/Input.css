@@ -5,7 +5,8 @@
     flex-direction: row;
     align-items: center;
     height:50px;
-    margin-top: 20px;
+    margin-top: 50px;
+    position:relative;
 }
 .input_cont {
     display:flex;
@@ -35,6 +36,7 @@
     background-color: #3D5473;
     color:#fff;
     font-weight: 600;
+    z-index: 1;
     transition: background-color 200ms ease-in-out;
 }
 .input_form > button:hover {
@@ -50,11 +52,12 @@
     text-align: center;
     width:422px;
     position: absolute;
-    z-index: 2;
-    top:160px;
+    z-index: 1;
+    top:50px;
 }
 .suggestion_cont > li {
-    margin: 5px 0;
+    
+    z-index: 2;
 }
 .suggestion_cont > li:hover {
     cursor: pointer;

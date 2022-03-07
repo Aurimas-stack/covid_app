@@ -9,12 +9,13 @@ interface LatestDataProps {
 }
 
 const LatestData: FC<LatestDataProps> = ({ data }) => {
-  if (data.length === 0) return null;
+  const cases = data[0].TotalCases !== undefined ? data[0].TotalCases : "api error";
+  const caseDate =  data[0].TotalDeaths !== undefined ? data[0].TotalDeaths : "api error"
 
   return (
     <div className="latest_data_cont">
-      <h1>Cases confirmed: {data[0].confirmed}.</h1>
-      <h3>Date: {data[0].date}.</h3>
+      <h1>Total cases: {cases}.</h1>
+      <h3>Total Deaths: {caseDate}.</h3>
     </div>
   );
 };
