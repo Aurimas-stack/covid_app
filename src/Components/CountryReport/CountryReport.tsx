@@ -1,13 +1,7 @@
 import { FC, useEffect, useRef } from "react";
-
 import * as d3 from "d3";
-import { scaleBand, scaleLinear, svg } from "d3";
 
 import { SixMonthsCountryData } from "../../utils/types";
-
-import AxisBottom from "./Axis/AxisBottom";
-import AxisLeft from "./Axis/AxisLeft";
-import Bars from "./Bars/Bars";
 
 import "./CountryReport.css";
 
@@ -17,36 +11,42 @@ interface ReportProps {
 
 const CountryReport: FC<ReportProps> = ({ report }): JSX.Element | null => {
   const svgRef = useRef(null);
-
+  const margin = { top: 50, right: 50, bottom: 50, left: 50 },
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+  const dataSet = report.map((el) => ({
+    x: new Date(el.date),
+    y: el.total_cases,
+  }));
   useEffect(() => {
     if (svgRef.current) {
-      const svg = d3.select(svgRef.current);
-      const data: { label: string; value: number }[] = [
-        { label: "New cases", value: Number(report[0].total_cases) },
-      ];
-      const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-      const width = 800;
-      const height = 600;
-      const yMinValue = d3.min(report, (d) => d.total_cases);
-      const yMaxValue = d3.max(report, (d) => d.total_cases);
-      const xMinValue = d3.min(report, (d) => d.date);
-      const xMaxValue = d3.max(report, (d) => d.date);
-
-      svg
+      d3.select(svgRef.current).select("svg").remove();
+      const yMaxValue = d3.max(dataSet, (d) => d.y);
+      const xMinValue = d3.min(dataSet, (d) => d.x);
+      const xMaxValue = d3.max(dataSet, (d) => d.x);
+      console.log();
+      const svg = d3
+        .select(svgRef.current)
+        .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      const tooltip = svg.append("div").attr("class", "tooltip");
-
-      const xScale = d3.scaleLinear().range([0, width]);
+      const xScale = d3
+        .scaleLinear()
+        .domain([xMinValue, xMaxValue] as [Date, Date])
+        .range([0, width]);
       const yScale = d3
         .scaleLinear()
         .range([height, 0])
-        .domain([0, Math.max(...report.map(({ total_cases }) => total_cases))]);
-
-      const line = d3.line().y( report => yScale())
+        .domain([0, yMaxValue] as number[])
+        .nice();
+      const line = d3
+        .line() //@ts-ignore
+        .x((d) => xScale(d.x)) //@ts-ignore
+        .y((d) => yScale(d.y))
+        .curve(d3.curveMonotoneX);
       svg
         .append("g")
         .attr("class", "grid")
@@ -57,28 +57,44 @@ const CountryReport: FC<ReportProps> = ({ report }): JSX.Element | null => {
             .tickSize(-height)
             .tickFormat(() => "")
         );
+      svg
+        .append("g")
+        .attr("class", "grid")
+        .call(
+          d3
+            .axisLeft(yScale)
+            .tickSize(-width)
+            .tickFormat(() => "")
+        );
+      svg
+        .append("g")
+        .attr("class", "x-axis")
+        .attr("transform", `translate(0,${height})`) // @ts-ignore
+        .call(d3.axisBottom().scale(xScale).tickFormat(d3.timeFormat("%Y %b")));
+
+      svg.append("g").attr("class", "y-axis").call(d3.axisLeft(yScale));
+
+      svg
+        .append("path")
+        .datum(dataSet)
+        .attr("fill", "none")
+        .attr("stroke", "#F23030")
+        .attr("stroke-width", 4)
+        .attr("class", "line") //@ts-ignore
+        .attr("d", line);
     }
-  }, []);
-
-  /*const width = 600 - margin.left - margin.right;
-  const height = 300 - margin.top - margin.bottom;
-
-  const scaleX = scaleBand()
-    .domain(data.map(({ label }) => label))
-    .range([0, width])
-    .padding(0.3);
-
-  const scaleY = scaleLinear()
-    .domain([0, Math.max(...data.map(({ value }) => value))])
-    .range([height, 0])
-    .nice();
-
-  const svg = d3.select("svg");
-  const chart = svg.append("g");
-  const bar = svg.append("rect");*/
+  }, [
+    dataSet,
+    width,
+    height,
+    margin.right,
+    margin.left,
+    margin.top,
+    margin.bottom,
+  ]);
 
   if (report.length === 0 || !report) return null;
 
-  return <svg className="d3-component" ref={svgRef}></svg>;
+  return <div className="d3-component" ref={svgRef}></div>;
 };
 export default CountryReport;
