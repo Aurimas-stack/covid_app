@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     color: #A61F1F;
+    margin-top:20px;
 }
 .latest_data_cont > h1 {
     margin:10px auto;

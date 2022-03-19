@@ -1,0 +1,5 @@
+.d3-component {
+    display:flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}

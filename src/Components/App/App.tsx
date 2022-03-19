@@ -33,8 +33,8 @@ function App(): JSX.Element {
     };
     fetchTotals();
     dispatch({ type: "LOADING", value: false });
+    
     return;
-
   }, []);
 
   const handleSuggestedCountries = () => {
@@ -50,9 +50,9 @@ function App(): JSX.Element {
     dispatch({
       type: "SUGGEST_COUNTRIES",
       value: countryListArray.filter((country) => {
-        return country.Country
-          .toLocaleLowerCase()
-          .includes(state.input.toLocaleLowerCase());
+        return country.Country.toLocaleLowerCase().includes(
+          state.input.toLocaleLowerCase()
+        );
       }),
     });
   };
@@ -63,9 +63,9 @@ function App(): JSX.Element {
       state.input
     );
     const country: CountryList[] = countryListArray.filter((country) => {
-      return country.Country
-        .toLocaleLowerCase()
-        .includes(state.input.toLocaleLowerCase());
+      return country.Country.toLocaleLowerCase().includes(
+        state.input.toLocaleLowerCase()
+      );
     });
 
     if (inputValidation.value === true) {
@@ -81,7 +81,9 @@ function App(): JSX.Element {
     dispatch({ type: "LOADING_COUNTRY_DATA", value: true });
 
     try {
-      const response: Response = await fetchCountryReport(country[0].ThreeLetterSymbol);
+      const response: Response = await fetchCountryReport(
+        country[0].ThreeLetterSymbol
+      );
       const data = await response.json();
       dispatch({ type: "COUNTRY_REPORT", value: data });
     } catch (error: any) {
@@ -103,7 +105,9 @@ function App(): JSX.Element {
     >
       {state.loading === false ? (
         <>
-          {state.latestData.length > 0 && <LatestData data={state.latestData} />}
+          {state.latestData.length > 0 && (
+            <LatestData data={state.latestData} />
+          )}
           <Input
             state={state}
             dispatch={dispatch}
@@ -114,7 +118,12 @@ function App(): JSX.Element {
             <Loader />
           ) : (
             state.countryReport.length > 0 && (
-              <CountryReport report={state.countryReport} />
+              <CountryReport
+                report={state.countryReport}
+                graph={state.showGraph}
+                graphType={state.graphType}
+                dispatch={dispatch}
+              />
             )
           )}
         </>
