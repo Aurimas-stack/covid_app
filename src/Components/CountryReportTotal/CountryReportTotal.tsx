@@ -4,6 +4,8 @@ import * as d3 from "d3";
 import { Action } from "../App/appReducer/appReducer";
 import { SixMonthsCountryData } from "../../utils/types";
 
+import useWindowDimensions from "./windowDimension";
+
 import "./CountryReport.css";
 
 interface ReportProps {
@@ -12,15 +14,36 @@ interface ReportProps {
   graphType: string;
 }
 
-const CountryReportTotal: FC<ReportProps> = ({ report, graphType, dispatch }): JSX.Element | null => {
+const CountryReportTotal: FC<ReportProps> = ({
+  report,
+  graphType,
+  dispatch,
+}): JSX.Element | null => {
+  const { width } = useWindowDimensions();
   const svgRef = useRef(null);
-  const margin = { top: 50, right: 50, bottom: 50, left: 80 },
-    width = 900 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-  const dataSet = report.map((el) => ({
+  let dateFormat: string = "%Y %b";
+  const margin: {top: number, right:number, bottom: number, left: number} = 
+  { top: 50, 
+    right: 50, 
+    bottom: 50, 
+    left: 80 };
+  let svgWidth:number = 900 - margin.left - margin.right,
+    svgHeight:number = 500 - margin.top - margin.bottom;
+  const dataSet: {x: Date, y: number}[] = report.map((el) => ({
     x: new Date(el.date),
-    y: graphType === "total_cases" ? el.total_cases : el.total_deaths
+    y: graphType === "total_cases" ? el.total_cases : el.total_deaths,
   }));
+
+  if (width < 900) {
+    svgWidth = 700 - margin.left - margin.right;
+    svgHeight = 400 - margin.top - margin.bottom;
+  }
+
+  if (width < 705) {
+    svgWidth = 500 - margin.left - margin.right;
+    svgHeight = 400 - margin.top - margin.bottom;
+    dateFormat = "%b";
+  }
 
   useEffect(() => {
     if (svgRef.current) {
@@ -31,17 +54,17 @@ const CountryReportTotal: FC<ReportProps> = ({ report, graphType, dispatch }): J
       const svg = d3
         .select(svgRef.current)
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", svgWidth + margin.left + margin.right)
+        .attr("height", svgHeight + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
       const xScale = d3
         .scaleLinear()
         .domain([xMinValue, xMaxValue] as [Date, Date])
-        .range([0, width]);
+        .range([0, svgWidth]);
       const yScale = d3
         .scaleLinear()
-        .range([height, 0])
+        .range([svgHeight, 0])
         .domain([0, yMaxValue] as number[])
         .nice();
       const line = d3
@@ -53,11 +76,11 @@ const CountryReportTotal: FC<ReportProps> = ({ report, graphType, dispatch }): J
       svg
         .append("g")
         .attr("class", "grid")
-        .attr("transform", `translate(0, ${height})`)
+        .attr("transform", `translate(0, ${svgHeight})`)
         .call(
           d3
             .axisBottom(xScale)
-            .tickSize(-height)
+            .tickSize(-svgHeight)
             .tickFormat(() => "")
         );
       svg
@@ -66,14 +89,14 @@ const CountryReportTotal: FC<ReportProps> = ({ report, graphType, dispatch }): J
         .call(
           d3
             .axisLeft(yScale)
-            .tickSize(-width)
+            .tickSize(-svgWidth)
             .tickFormat(() => "")
         );
       svg
         .append("g")
         .attr("class", "x-axis")
-        .attr("transform", `translate(0,${height})`) // @ts-ignore
-        .call(d3.axisBottom().scale(xScale).tickFormat(d3.timeFormat("%Y %b")));
+        .attr("transform", `translate(0,${svgHeight})`) // @ts-ignore
+        .call(d3.axisBottom().scale(xScale).tickFormat(d3.timeFormat(`${dateFormat}`)));
 
       svg.append("g").attr("class", "y-axis").call(d3.axisLeft(yScale));
 
@@ -97,20 +120,26 @@ const CountryReportTotal: FC<ReportProps> = ({ report, graphType, dispatch }): J
     }
   }, [
     dataSet,
-    width,
-    height,
+    svgWidth,
+    dateFormat,
+    svgHeight,
     margin.right,
     margin.left,
     margin.top,
     margin.bottom,
-    graphType
+    graphType,
   ]);
 
   if (report.length === 0 || !report) return null;
 
   return (
     <div className="d3-component" ref={svgRef}>
-      <button className="btn" onClick={() => dispatch({type: "SHOW_GRAPH", value: false})}>Close</button>
+      <button
+        className="btn"
+        onClick={() => dispatch({ type: "SHOW_GRAPH", value: false })}
+      >
+        Close
+      </button>
     </div>
   );
 };

@@ -1,46 +1,28 @@
-# Getting Started with Create React App
+# React, Typescript & D3.js project: "Covid app".
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Short description:
+* API: https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com .
+* Get needed covid data for a country through an input field.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Detailed description:
+* On page load search input, search button and general covid data are displayed.
+* Input is validated this way:
+    - HTML: `required`, `maximum length`.
+    - JS: `empty string`, `maximum word length` and by testing if the word only contains `spaces and letters`.
+* Input validation errors are displayed below the input.
+* Next to the input field, a total letter count is displayed with a maximum letter count.
+* By typing in input field user get suggestion box below the input:
+    - Up to 5 countries are displayed in a suggestion box.
+    - Clicking on a suggested country, inputs that value for input field.
+* Once search button is clicked, information is being fetched.
+* During fetching a spinning element is displayed.
+* Once data is fetched, this information is displayed:
+    - Last date of the data for latest 6 month period.
+    - New cases count.
+    - New death(s) count.
+    - Total cases and total deaths buttons.
+* Pressing on either total cases or total deaths buttons displays a linear graph, using latest 6 month data:
+    - Y axis displays cases or death count.
+    - X axis displays time (year, months).
+    - A line to show a visual change for selected item.
+* Pressing close button, closes selected graph.

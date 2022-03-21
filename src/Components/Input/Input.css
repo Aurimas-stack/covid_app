@@ -70,3 +70,12 @@
     flex-direction: row;
     align-items: center;
 }
+
+@media screen and (max-width: 575px) {
+    .input_form {
+        width:400px;
+    }
+    .input_cont > input {
+        width:300px;
+    }
+}
