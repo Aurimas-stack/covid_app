@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/covid_app/static/css/main.1d83c2a8.css",
+    "main.js": "/covid_app/static/js/main.fead9810.js",
+    "static/js/787.d610ed47.chunk.js": "/covid_app/static/js/787.d610ed47.chunk.js",
+    "index.html": "/covid_app/index.html",
+    "main.1d83c2a8.css.map": "/covid_app/static/css/main.1d83c2a8.css.map",
+    "main.fead9810.js.map": "/covid_app/static/js/main.fead9810.js.map",
+    "787.d610ed47.chunk.js.map": "/covid_app/static/js/787.d610ed47.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1d83c2a8.css",
+    "static/js/main.fead9810.js"
+  ]
+}
